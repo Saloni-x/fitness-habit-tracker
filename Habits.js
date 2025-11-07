@@ -5,22 +5,17 @@ const Habits = () => {
     const [habit, setHabit] = useState('');
     const [habits, setHabits] = useState([]);
     const token = localStorage.getItem('token');
-
-    // ✅ useCallback lagao
     const fetchHabits = useCallback(async () => {
         const res = await axios.get('http://localhost:5000/api/habits', {
             headers: { Authorization: `Bearer ${token}` }
         });
         setHabits(res.data);
     }, [token]);
-
     useEffect(() => {
         fetchHabits();
     }, [fetchHabits]);
-
     const addHabit = async () => {
         if (habit === '') return;
-
         await axios.post('http://localhost:5000/api/habits', { name: habit }, {
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -28,15 +23,12 @@ const Habits = () => {
         setHabit('');
         fetchHabits();
     };
-
     const deleteHabit = async (id) => {
         await axios.delete(`http://localhost:5000/api/habits/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
-
         fetchHabits();
     };
-
     return (
         <div>
             <h2>Your Habits</h2>
@@ -59,5 +51,6 @@ const Habits = () => {
         </div>
     );
 };
+
 
 export default Habits;
